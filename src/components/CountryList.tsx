@@ -1,0 +1,46 @@
+import type { Country } from "../types/country";
+
+interface CountryListProps {
+  countries: Country[];
+  selectedCountryCode: string;
+  onSelectCountry: (countryCode: string) => void;
+}
+
+/**
+ * Displays a selectable list of countries with their flags.
+ *
+ * @param props Component props containing countries and selection handlers.
+ * @returns The rendered country selection list.
+ */
+export function CountryList({
+  countries,
+  selectedCountryCode,
+  onSelectCountry,
+}: CountryListProps) {
+  return (
+    <ul className="country-list" role="listbox" aria-label="Countries">
+      {countries.map((country) => {
+        const isSelected = country.code === selectedCountryCode;
+
+        return (
+          <li key={country.code}>
+            <button
+      				className={`country-list__item ${isSelected ? "is-selected" : ""}`}
+              type="button"
+              aria-selected={isSelected}
+              onClick={() => onSelectCountry(country.code)}
+            >
+              <img
+                className="country-list__flag"
+                src={country.flagUrl}
+                alt={`${country.name} flag`}
+                loading="lazy"
+              />
+              <span>{country.name}</span>
+            </button>
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
