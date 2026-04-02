@@ -25,6 +25,12 @@ function App() {
   const [loadError, setLoadError] = useState<string | null>(null);
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<Map | null>(null);
+  const selectedCountryCodeRef = useRef(selectedCountryCode);
+  const lastMapScrollEventAtRef = useRef(0);
+
+  useEffect(() => {
+    selectedCountryCodeRef.current = selectedCountryCode;
+  }, [selectedCountryCode]);
 
   useEffect(() => {
     let isMounted = true;
@@ -112,6 +118,26 @@ function App() {
       map.updateSize();
     });
     resizeObserver.observe(targetElement);
+
+    function handleMapWheelScroll() {
+      const now = Date.now();
+
+      if (now - lastMapScrollEventAtRef.current < 1000) {
+        return;
+      }
+
+      lastMapScrollEventAtRef.current = now;
+      window.dataLayer?.push({
+        event: "country_map_scroll",
+        selected_country_code: selectedCountryCodeRef.current,
+        map_zoom: Number(map.getView().getZoom()?.toFixed(2) ?? 0),
+      });
+    }
+
+    targetElement.addEventListener("wheel", handleMapWheelScroll, {
+      passive: true,
+    });
+
     requestAnimationFrame(() => {
       map.updateSize();
     });
@@ -120,6 +146,7 @@ function App() {
 
     return () => {
       resizeObserver.disconnect();
+      targetElement.removeEventListener("wheel", handleMapWheelScroll);
       if (mapInstanceRef.current) {
         mapInstanceRef.current.setTarget(undefined);
         mapInstanceRef.current = null;
