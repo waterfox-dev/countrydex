@@ -27,7 +27,9 @@ export function CountryMap({ country, children }: CountryMapProps) {
         </h2>
       </header>
 
-      <div className="country-map__frame">{children}</div>
+      <div className="country-map__frame">
+        {children}
+      </div>
     </div>
   );
 }

@@ -99,16 +99,27 @@ function App() {
       zoom: selectedCountry.zoom,
     });
 
+    const targetElement = mapContainerRef.current;
+
     const map = new Map({
-      target: mapContainerRef.current,
+      target: targetElement,
       layers: [new TileLayer({ source: new OSM() })],
       view,
     });
 
     mapInstanceRef.current = map;
+    const resizeObserver = new ResizeObserver(() => {
+      map.updateSize();
+    });
+    resizeObserver.observe(targetElement);
+    requestAnimationFrame(() => {
+      map.updateSize();
+    });
+
     console.debug("✓ OpenLayers map initialized with", selectedCountry.name);
 
     return () => {
+      resizeObserver.disconnect();
       if (mapInstanceRef.current) {
         mapInstanceRef.current.setTarget(undefined);
         mapInstanceRef.current = null;
@@ -160,13 +171,7 @@ function App() {
 
       <section className="map-panel" aria-label="Country map">
         <CountryMap country={selectedCountry}>
-          <div
-            ref={mapContainerRef}
-            style={{
-              width: "100%",
-              height: "100%",
-            }}
-          />
+          <div className="country-map__target" ref={mapContainerRef} />
         </CountryMap>
       </section>
     </main>
