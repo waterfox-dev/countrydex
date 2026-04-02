@@ -18,7 +18,8 @@ export function CountryList({
   onSelectCountry,
 }: CountryListProps) {
   function handleCountrySelect(country: Country) {
-    window.gtag?.("event", "select_country", {
+    window.dataLayer?.push({
+      event: "select_country",
       country_name: country.name,
       country_code: country.code,
     });

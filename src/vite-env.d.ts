@@ -2,11 +2,7 @@
 
 declare global {
   interface Window {
-    gtag?: (
-      command: string,
-      eventName: string,
-      params?: Record<string, string | number | boolean | undefined>,
-    ) => void;
+    dataLayer?: Array<Record<string, string | number | boolean | undefined>>;
   }
 }
 
