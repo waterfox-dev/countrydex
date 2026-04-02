@@ -1,3 +1,5 @@
+import { useRef, type UIEvent } from "react";
+
 import type { Country } from "../types/country";
 
 interface CountryListProps {
@@ -17,6 +19,8 @@ export function CountryList({
   selectedCountryCode,
   onSelectCountry,
 }: CountryListProps) {
+  const sentScrollMilestonesRef = useRef<Set<number>>(new Set());
+
   function handleCountrySelect(country: Country) {
     window.dataLayer?.push({
       event: "select_country",
@@ -27,8 +31,39 @@ export function CountryList({
     onSelectCountry(country.code);
   }
 
+  function handleListScroll(event: UIEvent<HTMLUListElement>) {
+    const element = event.currentTarget;
+    const maxScrollTop = element.scrollHeight - element.clientHeight;
+
+    if (maxScrollTop <= 0) {
+      return;
+    }
+
+    const scrollPercent = Math.round((element.scrollTop / maxScrollTop) * 100);
+    const milestones = [25, 50, 75, 100];
+
+    for (const milestone of milestones) {
+      if (
+        scrollPercent >= milestone &&
+        !sentScrollMilestonesRef.current.has(milestone)
+      ) {
+        sentScrollMilestonesRef.current.add(milestone);
+        window.dataLayer?.push({
+          event: "country_list_scroll",
+          scroll_milestone: milestone,
+          selected_country_code: selectedCountryCode,
+        });
+      }
+    }
+  }
+
   return (
-    <ul className="country-list" role="listbox" aria-label="Countries">
+    <ul
+      className="country-list"
+      role="listbox"
+      aria-label="Countries"
+      onScroll={handleListScroll}
+    >
       {countries.map((country) => {
         const isSelected = country.code === selectedCountryCode;
 
