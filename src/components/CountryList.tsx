@@ -17,6 +17,15 @@ export function CountryList({
   selectedCountryCode,
   onSelectCountry,
 }: CountryListProps) {
+  function handleCountrySelect(country: Country) {
+    window.gtag?.("event", "select_country", {
+      country_name: country.name,
+      country_code: country.code,
+    });
+
+    onSelectCountry(country.code);
+  }
+
   return (
     <ul className="country-list" role="listbox" aria-label="Countries">
       {countries.map((country) => {
@@ -25,10 +34,10 @@ export function CountryList({
         return (
           <li key={country.code}>
             <button
-      				className={`country-list__item ${isSelected ? "is-selected" : ""}`}
+              className={`country-list__item ${isSelected ? "is-selected" : ""}`}
               type="button"
               aria-selected={isSelected}
-              onClick={() => onSelectCountry(country.code)}
+              onClick={() => handleCountrySelect(country)}
             >
               <img
                 className="country-list__flag"
