@@ -238,6 +238,57 @@ function App() {
               </div>
             </dl>
           </section>
+
+          <section className="app-footer__resources" aria-label="Useful geography links">
+            <h3>Useful Links for Geography Practice</h3>
+            <ul className="resource-links">
+              <li>
+                <a
+                  href="https://en.wikipedia.org/wiki/List_of_sovereign_states"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Wikipedia - List of sovereign states
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://worldle.teuteuf.fr/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Worldle - Daily geography guessing game
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://www.flagle.io/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Flagle - Daily flag challenge
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://www.cia.gov/the-world-factbook/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  CIA World Factbook - Country profiles
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://unstats.un.org/unsd/methodology/m49/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  UN M49 geoscheme - Regions and country groupings
+                </a>
+              </li>
+            </ul>
+          </section>
         </div>
 
         <div className="app-footer__credits">

@@ -203,7 +203,8 @@ body {
 }
 
 .app-footer__learning,
-.app-footer__faq {
+.app-footer__faq,
+.app-footer__resources {
   flex: 1;
   min-width: 260px;
 }
@@ -277,6 +278,29 @@ body {
   margin: 0.35rem 0 0;
   color: #4a5568;
   font-size: 0.9rem;
+}
+
+.resource-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.resource-links li {
+  margin: 0;
+}
+
+.resource-links a {
+  color: #1f4e7a;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.resource-links a:hover {
+  text-decoration: underline;
 }
 
 /* Promo Box (Profdle) */
