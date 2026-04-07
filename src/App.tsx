@@ -12,9 +12,8 @@ import type { Country } from "./types/country";
 import "./App.css";
 
 /**
- * Renders the Country Dex page with a selectable country list and map focus.
- *
- * @returns The main Country Dex application layout.
+ * Renders the Country Dex page: an interactive tool to identify countries per flags.
+ * Features an OpenLayers map that centers on the selected national flag.
  */
 function App() {
   const [countryCatalog, setCountryCatalog] = useState<Country[]>(countries);
@@ -35,9 +34,6 @@ function App() {
   useEffect(() => {
     let isMounted = true;
 
-    /**
-     * Loads the country list from remote APIs and applies it to local state.
-     */
     async function loadCountryCatalog(): Promise<void> {
       setIsLoading(true);
       setLoadError(null);
@@ -87,16 +83,8 @@ function App() {
     );
   }, [countryCatalog, selectedCountryCode]);
 
-  /**
-   * Initializes the native OpenLayers map instance.
-   * Runs once on mount and creates the map with the selected country.
-   */
   useEffect(() => {
-    if (!mapContainerRef.current) {
-      return;
-    }
-
-    if (mapInstanceRef.current) {
+    if (!mapContainerRef.current || mapInstanceRef.current) {
       return;
     }
 
@@ -121,11 +109,7 @@ function App() {
 
     function handleMapWheelScroll() {
       const now = Date.now();
-
-      if (now - lastMapScrollEventAtRef.current < 1000) {
-        return;
-      }
-
+      if (now - lastMapScrollEventAtRef.current < 1000) return;
       lastMapScrollEventAtRef.current = now;
       window.dataLayer?.push({
         event: "country_map_scroll",
@@ -142,8 +126,6 @@ function App() {
       map.updateSize();
     });
 
-    console.debug("✓ OpenLayers map initialized with", selectedCountry.name);
-
     return () => {
       resizeObserver.disconnect();
       targetElement.removeEventListener("wheel", handleMapWheelScroll);
@@ -154,29 +136,22 @@ function App() {
     };
   }, []);
 
-  /**
-   * Updates map view center and zoom when selected country changes.
-   */
   useEffect(() => {
-    if (!mapInstanceRef.current) {
-      console.warn("Map instance not available yet");
-      return;
-    }
-
+    if (!mapInstanceRef.current) return;
     const view = mapInstanceRef.current.getView();
-    console.debug("✓ Updating map view to center on", selectedCountry.name);
     view.setCenter(selectedCountry.center);
     view.setZoom(selectedCountry.zoom);
   }, [selectedCountry]);
 
   return (
     <main className="app-shell">
-      <section className="country-panel" aria-label="Country selector">
+      {/* Sidebar: SEO optimized for "countries per flags" search queries */}
+      <section className="country-panel" aria-label="Country flag selector">
         <header className="country-panel__header">
-          <p className="country-panel__eyebrow">Atlas</p>
-          <h1>Country Dex</h1>
+          <p className="country-panel__eyebrow">World Flags Explorer</p>
+          <h1>Country Dex: Identify Countries by Their Flags</h1>
           <p className="country-panel__subtitle">
-            Pick a flag to center the map on that country.
+            Explore our <strong>global country flag database</strong> and select any nation to instantly center the interactive world map.
           </p>
         </header>
 
@@ -186,55 +161,88 @@ function App() {
           onSelectCountry={setSelectedCountryCode}
         />
 
-        {isLoading ? (
-          <p className="country-panel__status">
-            Loading countries from APIs...
-          </p>
-        ) : null}
-        {loadError ? (
-          <p className="country-panel__status is-error">{loadError}</p>
-        ) : null}
+        {isLoading ? <p className="country-panel__status">Updating country and flag data...</p> : null}
+        {loadError ? <p className="country-panel__status is-error">{loadError}</p> : null}
       </section>
 
-      <section className="map-panel" aria-label="Country map">
+      {/* Map Section */}
+      <section className="map-panel" aria-label="Interactive world map">
         <CountryMap country={selectedCountry}>
           <div className="country-map__target" ref={mapContainerRef} />
         </CountryMap>
       </section>
+
+      {/* Footer: Keyword-rich content for search crawlers */}
       <footer className="app-footer">
         <div className="app-footer__content">
-          <div className="app-footer__about">
-            <h2>About This Project</h2>
+          <article className="app-footer__about">
+            <h2>About Country Dex Flag Finder</h2>
             <p>
-              This project demonstrates how to integrate a native OpenLayers map
-              instance within a React application. It features a list of countries
-              that users can select to center the map on their location.
+              Country Dex is an <strong>interactive world atlas</strong> created to help users
+              identify countries by their flags. By combining a searchable list of
+              national flags with live map positioning, it supports geography learning,
+              exam preparation, and classroom activities for students and teachers.
             </p>
 
-            {/* Featured Project Link */}
             <div className="app-footer__promo">
-              <span>Check out our other project:</span>
+              <span>Try our trivia project:</span>
               <a href="https://pierre-gibault.github.io/Profdle/" target="_blank" rel="noopener noreferrer" className="promo-link">
                 Profdle 🎓
               </a>
             </div>
-          </div>
+          </article>
 
           <div className="app-footer__features">
-            <h3>Key Features</h3>
+            <h3>Key Geography Features</h3>
             <ul className="feature-grid">
-              <li>Native OpenLayers integration</li>
-              <li>Dynamic country list via API</li>
-              <li>Real-time map centering</li>
-              <li>Analytics tracking</li>
+              <li>Comprehensive countries and flags reference</li>
+              <li>Interactive world map powered by OpenLayers</li>
+              <li>Fast map focus for each selected country</li>
+              <li>ISO-aligned country code identification</li>
             </ul>
           </div>
+
+          <section className="app-footer__learning" aria-label="How to learn countries and flags">
+            <h3>How to Learn Countries and Flags</h3>
+            <ol className="learning-steps">
+              <li>Pick one region and study 10 flags at a time.</li>
+              <li>Select each country and match the flag with map location.</li>
+              <li>Repeat the same set after 24 hours for better recall.</li>
+              <li>Create mini quizzes mixing easy and difficult flags.</li>
+            </ol>
+          </section>
+
+          <section className="app-footer__faq" aria-label="Frequently asked questions">
+            <h3>FAQ</h3>
+            <dl className="faq-list">
+              <div>
+                <dt>How can I identify countries by their flags faster?</dt>
+                <dd>
+                  Focus on unique symbols, stripe directions, and color order,
+                  then confirm your guess using the map position.
+                </dd>
+              </div>
+              <div>
+                <dt>Is Country Dex useful for geography students?</dt>
+                <dd>
+                  Yes. It combines visual flag practice with real-world
+                  geography, making exam preparation and class review easier.
+                </dd>
+              </div>
+              <div>
+                <dt>Can teachers use this in class?</dt>
+                <dd>
+                  Absolutely. Teachers can build short country-flag challenges
+                  and use the map view for interactive group activities.
+                </dd>
+              </div>
+            </dl>
+          </section>
         </div>
 
-        {/* Credits Bar */}
         <div className="app-footer__credits">
-          <p>Made with effort by <strong>Inés Aamara</strong>, <strong>Clément Baratin</strong>, and <strong>Pierre Gibault</strong></p>
-          <p className="footer-date">© 2026 Country Dex</p>
+          <p>Developed by <strong>Inés Aamara</strong>, <strong>Clément Baratin</strong>, and <strong>Pierre Gibault</strong></p>
+          <p className="footer-date">© 2026 Country Dex - Learn World Countries and Flags</p>
         </div>
       </footer>
     </main>

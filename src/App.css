@@ -26,11 +26,11 @@ body {
 .app-shell {
   display: grid;
   grid-template-columns: minmax(280px, 360px) minmax(0, 1fr);
-  grid-template-rows: 1fr auto;
+  grid-template-rows: minmax(0, calc(100vh - 3rem)) auto;
   gap: 1.5rem;
-  height: 100vh;
+  min-height: 100vh;
   padding: 1.5rem;
-  overflow: hidden;
+  overflow: visible;
 }
 
 /* Sidebar Panel */
@@ -38,6 +38,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  height: 100%;
   min-height: 0;
   border-radius: 1rem;
   padding: 1.5rem;
@@ -120,9 +121,10 @@ body {
 .map-panel {
   display: flex;
   flex-direction: column;
+  height: 100%;
   min-height: 0;
   border-radius: 1rem;
-  overflow: hidden;
+  overflow: visible;
   background: #ffffff;
   box-shadow: 0 10px 35px rgba(18, 38, 63, 0.12);
   border: 1px solid rgba(255, 255, 255, 0.4);
@@ -131,6 +133,7 @@ body {
 .country-map {
   flex: 1;
   height: 100%;
+  min-height: 0;
   display: grid;
   grid-template-rows: auto 1fr;
 }
@@ -160,8 +163,11 @@ body {
   object-fit: cover;
 }
 
+.country-map__frame {
+  min-height: 0;
+}
+
 .country-map__target {
-  flex: 1;
   width: 100%;
   height: 100%;
   background: #f1f5f9; /* Map fallback color */
@@ -192,6 +198,12 @@ body {
 }
 
 .app-footer__features {
+  flex: 1;
+  min-width: 260px;
+}
+
+.app-footer__learning,
+.app-footer__faq {
   flex: 1;
   min-width: 260px;
 }
@@ -238,6 +250,33 @@ body {
   left: 0;
   color: #2d6da3;
   font-weight: bold;
+}
+
+.learning-steps {
+  margin: 0;
+  padding-left: 1.2rem;
+  display: grid;
+  gap: 0.55rem;
+  color: #2d3748;
+  font-size: 0.9rem;
+}
+
+.faq-list {
+  margin: 0;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.faq-list dt {
+  font-weight: 700;
+  color: #1f2937;
+  font-size: 0.92rem;
+}
+
+.faq-list dd {
+  margin: 0.35rem 0 0;
+  color: #4a5568;
+  font-size: 0.9rem;
 }
 
 /* Promo Box (Profdle) */
@@ -289,9 +328,17 @@ body {
 @media (max-width: 900px) {
   .app-shell {
     grid-template-columns: 1fr;
-    grid-template-rows: 400px 500px auto;
-    height: auto;
+    grid-template-rows: auto;
     overflow: visible;
+  }
+
+  .country-panel,
+  .map-panel {
+    height: auto;
+  }
+
+  .country-map__target {
+    height: clamp(320px, 52vh, 560px);
   }
   
   .app-footer__content {
