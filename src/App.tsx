@@ -201,6 +201,42 @@ function App() {
           <div className="country-map__target" ref={mapContainerRef} />
         </CountryMap>
       </section>
+      <footer className="app-footer">
+        <div className="app-footer__content">
+          <div className="app-footer__about">
+            <h2>About This Project</h2>
+            <p>
+              This project demonstrates how to integrate a native OpenLayers map
+              instance within a React application. It features a list of countries
+              that users can select to center the map on their location.
+            </p>
+
+            {/* Featured Project Link */}
+            <div className="app-footer__promo">
+              <span>Check out our other project:</span>
+              <a href="https://pierre-gibault.github.io/Profdle/" target="_blank" rel="noopener noreferrer" className="promo-link">
+                Profdle 🎓
+              </a>
+            </div>
+          </div>
+
+          <div className="app-footer__features">
+            <h3>Key Features</h3>
+            <ul className="feature-grid">
+              <li>Native OpenLayers integration</li>
+              <li>Dynamic country list via API</li>
+              <li>Real-time map centering</li>
+              <li>Analytics tracking</li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Credits Bar */}
+        <div className="app-footer__credits">
+          <p>Made with effort by <strong>Inés Aamara</strong>, <strong>Clément Baratin</strong>, and <strong>Pierre Gibault</strong></p>
+          <p className="footer-date">© 2026 Country Dex</p>
+        </div>
+      </footer>
     </main>
   );
 }
